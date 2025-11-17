@@ -1,13 +1,20 @@
 class Solution:
     def maxArea(self, height: List[int]) -> int:
-        l = 0
-        r = len(height)-1
-        curr_max = (r-l) * min(height[l], height[r])
+        l, r = 0, len(height)-1
+        best = 0
         while l < r:
-            if height[l] >= height[r]: # greedily decrement right if equal
+            h = min(height[l], height[r])
+            w = r - l
+            best = max(best, w*h)
+
+            # move pointers
+            if height[l] < height[r]:
+                l += 1
+            elif height[l] > height[r]:
                 r -= 1
             else:
-                l += 1
-            curr_max = max(curr_max, (r-l) * min(height[l], height[r]))
-        return curr_max
-            
+                if height[l+1] > height[r-1]:
+                    l += 1
+                else:
+                    r -= 1
+        return best
